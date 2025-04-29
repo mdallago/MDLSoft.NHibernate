@@ -69,9 +69,13 @@ namespace MDLSoft.NHibernate.Dao
                 query.SetMaxResults(data.Rows);
             }
 
-            foreach (var order in data.Sidx?.Split('|').Select(ord => (data.Sord.Equals("asc", StringComparison.CurrentCultureIgnoreCase)) ? Order.Asc(ord) : Order.Desc(ord)))
+            if (!string.IsNullOrEmpty(data.Sidx))
             {
-                query.AddOrder(order);
+                foreach (var ord in data.Sidx.Split('|'))
+                {
+                    Order order = (data.Sord.Equals("asc", StringComparison.CurrentCultureIgnoreCase)) ? Order.Asc(ord) : Order.Desc(ord);
+                    query.AddOrder(order);
+                }
             }
 
             var countCriteria = CriteriaTransformer.TransformToRowCount(query);
