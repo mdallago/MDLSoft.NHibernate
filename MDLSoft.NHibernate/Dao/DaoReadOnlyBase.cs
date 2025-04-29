@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -69,7 +69,7 @@ namespace MDLSoft.NHibernate.Dao
                 query.SetMaxResults(data.Rows);
             }
 
-            foreach (var order in data.Sidx.Split('|').Select(ord => (data.Sord.ToLower() == "asc") ? Order.Asc(ord) : Order.Desc(ord)))
+            foreach (var order in data.Sidx?.Split('|').Select(ord => (data.Sord.Equals("asc", StringComparison.CurrentCultureIgnoreCase)) ? Order.Asc(ord) : Order.Desc(ord)))
             {
                 query.AddOrder(order);
             }
