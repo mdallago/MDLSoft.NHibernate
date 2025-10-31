@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using NHibernate;
 using NHibernate.Context;
 using NHibernate.Engine;
@@ -13,8 +12,6 @@ namespace MDLSoft.NHibernate.MultiSessionFactory
     [Serializable]
     public abstract class CurrentSessionContext : ICurrentSessionContext
     {
-        protected static readonly ILog log = LogManager.GetLogger(typeof(CurrentSessionContext));
-
         protected ISessionFactoryImplementor factory;
 
         protected CurrentSessionContext(ISessionFactoryImplementor factory)
@@ -113,7 +110,6 @@ namespace MDLSoft.NHibernate.MultiSessionFactory
         {
             if (Wrapper == null)
             {
-                log.Warn("Session wrapper not available.");
                 return session;
             }
             return Wrapper.Wrap(session, UnbindSession, null);
@@ -168,7 +164,6 @@ namespace MDLSoft.NHibernate.MultiSessionFactory
             ISession orphan = DoUnbind(factory, false);
             if (orphan != null)
             {
-                log.Warn("Already session bound on call to Bind(); make sure you clean up your sessions!");
                 try
                 {
                     var transaction = orphan.GetCurrentTransaction();
@@ -180,14 +175,14 @@ namespace MDLSoft.NHibernate.MultiSessionFactory
                         }
                         catch (Exception t)
                         {
-                            log.Debug("Unable to rollback transaction for orphaned session", t);
+                            //TODO
                         }
                     }
                     orphan.Close();
                 }
                 catch (Exception t)
                 {
-                    log.Debug("Unable to close orphaned session", t);
+                    //TODO
                 }
             }
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using log4net;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Engine;
@@ -11,8 +10,6 @@ namespace MDLSoft.NHibernate.MultiSessionFactory
     [Serializable]
     public class MultiSessionFactoryProvider : ISessionFactoryProvider
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(MultiSessionFactoryProvider));
-
         [NonSerialized]
         private IConfigurationProvider mfc;
         private string defaultSessionFactoryName;
@@ -45,7 +42,6 @@ namespace MDLSoft.NHibernate.MultiSessionFactory
                 return;
             }
 
-            log.Debug("Initialize new session factories reading the configuration.");
             foreach (Configuration cfg in mfc.Configure())
             {
                 var sf = (ISessionFactoryImplementor)cfg.BuildSessionFactory();
